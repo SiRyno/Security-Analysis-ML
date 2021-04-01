@@ -1,0 +1,5 @@
+.vscode/settings.json
+ind_nifty50list.csv
+nifty50tickers.pickle
+__pycache__/get_list.cpython-38.pyc
+stock_dfs
