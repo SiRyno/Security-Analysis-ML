@@ -5,13 +5,14 @@ import pickle
 import datetime as dt
 import pandas_datareader.data as web
 
+
 def get_data(list_get=False):
     if list_get:
-        tickers = get_list.get_list()
+        tickers = get_list.get_list_csv()
     else:
         with open("nifty50tickers.pickle", "rb") as f:
             tickers = pickle.load(f)
-    
+
     if not os.path.exists("stock_dfs"):
         os.makedirs("stock_dfs")
 
@@ -25,5 +26,6 @@ def get_data(list_get=False):
             df.to_csv("stock_dfs/{}.csv".format(ticker))
         else:
             print("Already have {}.".format(ticker))
-        
+
+
 get_data()

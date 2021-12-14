@@ -1,25 +1,15 @@
-import requests
-import os
-import bs4 as bs
-import pickle
 import pandas as pd
 
-def get_list():
-    url = "https://en.wikipedia.org/wiki/NIFTY_50"
 
-    resp = requests.get(url)
-    soup = bs.BeautifulSoup(resp.text, 'lxml')
-    table = soup.find("table", {'class': "wikitable sortable"})
-    
-    tickers = []
-    
-    for row in table.findAll('tr')[1:]:
-        ticker = row.findAll('td')[1].text
-        tickers.append(ticker)
+def get_list_csv(save=False):
+    url = "https://www1.nseindia.com/content/equities/EQUITY_L.csv"
 
-    with open("nifty50tickers.pickle", "wb") as f:
-        pickle.dump(tickers, f)
+    sec_pd = pd.read_csv(url)
 
-    return tickers
+    # print(sec_pd.head())
 
-get_list()
+    if save:
+        sec_pd.to_csv("nifty_sec.csv")
+
+
+get_list_csv(True)
