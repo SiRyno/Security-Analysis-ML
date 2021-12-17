@@ -12,14 +12,40 @@ import config
 
 
 auth = tweepy.OAuthHandler(config.TWITTER_CONSUMER_KEY, config.TWITTER_CONSUMER_SECRET)
-auth.set_access_token(config.TWITTER_ACCESS_TOKEN, config.TWITTER_ACCESS_TOKEN_SECRET)
+# auth.set_access_token(config.TWITTER_ACCESS_TOKEN, config.TWITTER_ACCESS_TOKEN_SECRET)
 api = tweepy.API(auth)
 
 ticker = m.get_ticker()
 
 st.title("Security Analysis")
 
-ticker = st.selectbox(label="Stock", options=ticker)
+option = st.sidebar.selectbox("Which Dashboard?", ("twitter", "chart"))
+ticker = st.sidebar.selectbox(label="Stock", options=ticker)
+
+
+st.header(option)
+
+
+# user = api.get_user(username="traderstewie")
+# tweets = api.search_tweets(q=ticker)
+tweets = tweepy.Cursor(api.search_tweets, q=ticker)
+
+if option == "twitter":
+    for tweet in tweets.items():
+        st.write(tweet.text)
+
+# st.subheader("traderstewie")
+# st.image(user.profile_image_url)
+
+
+# for tweet in tweets:
+#     if "$" in tweet.text:
+#         words = tweet.text.split(" ")
+#         for word in words:
+#             if word.startswith("$") and word[1:].isalpha():
+#                 symbol = word[1:]
+#                 st.write(symbol)
+#                 st.write(tweet.text)
 
 ticker_yahoo = ticker + ".NS"
 
@@ -35,17 +61,18 @@ df.reset_index(inplace=True)
 # fig.add_trace(go.Scatter(x=df.Date, y=df["Adj Close"], mode="lines"), row=1, col=1)
 # fig.add_trace(go.Bar(x=df.Date, y=df["Volume"]), row=2, col=1)
 
-fig = go.Figure(
-    data=[
-        go.Candlestick(
-            x=df["Date"],
-            open=df["Open"],
-            high=df["High"],
-            low=df["Low"],
-            close=df["Close"],
-        )
-    ]
-)
+if option == "chart":
+    fig = go.Figure(
+        data=[
+            go.Candlestick(
+                x=df["Date"],
+                open=df["Open"],
+                high=df["High"],
+                low=df["Low"],
+                close=df["Close"],
+            )
+        ]
+    )
 
 # fig.show()
 
