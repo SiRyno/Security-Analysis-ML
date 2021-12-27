@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import datetime as dt
 import plotly.express as px
 import plotly.graph_objects as go
@@ -31,8 +32,10 @@ st.header(option)
 tweets = tweepy.Cursor(api.search_tweets, q=ticker)
 
 if option == "twitter":
+    i = 1
     for tweet in tweets.items():
-        st.write(tweet.text)
+        st.write(str(i) + " -> " + tweet.text)
+        i += 1
 
 # st.subheader("traderstewie")
 # st.image(user.profile_image_url)
@@ -73,7 +76,46 @@ if option == "chart":
             )
         ]
     )
+    st.plotly_chart(fig)
 
-# fig.show()
+    url = "https://yhoo.it/33MKS3H"
+    st.write(url)
+    # fig.show()
 
-st.plotly_chart(fig)
+    # Prediction
+    # Train the model on the last 29 days and predict the label for the 30th day
+    window = 30
+
+    num_samples = len(df) - window
+    indices = np.arange(num_samples).astype(np.int)[:, None] + np.arange(
+        window + 1
+    ).astype(np.int)
+    data = df["Adj Close"].values[indices]
+    X = data[:, :-1]
+    y = data[:, -1]
+    split_frac = 0.8
+    split_indices = int(split_frac * num_samples)
+    X_train = X[:split_indices]
+    y_train = y[:split_indices]
+    X_test = X[split_indices:]
+    y_test = y[split_indices:]
+
+    from sklearn.linear_model import LinearRegression
+
+    # Train
+    linear_reg_model = LinearRegression()
+    linear_reg_model.fit(X_train, y_train)
+
+    # Inferences
+    y_pred_train_linear_reg = linear_reg_model.predict(X_train)
+    y_pred_linear_reg = linear_reg_model.predict(X_test)
+
+    st.write(y_pred_linear_reg)
+    # Plot the graph for it has trained on the training data
+    # df_linear = df.copy()
+    # df_linear.drop(["Open", "High", "Low", "Close", "Volume"], axis=1, inplace=True)
+    # df_linear = df_linear.iloc[window:split_indices]
+    # df_linear["Adj Close Train"] = y_pred_train_linear_reg[:-window]
+    # df_linear.plot(
+    #     label="AAPL", figsize=(16, 8), title="Adjusted Closing Price", grid=True
+    # )
