@@ -34,8 +34,9 @@ tweets = tweepy.Cursor(api.search_tweets, q=ticker)
 if option == "twitter":
     i = 1
     for tweet in tweets.items():
-        st.write(str(i) + " -> " + tweet.text)
-        i += 1
+        if i <= 30:
+            st.write(str(i) + " -> " + tweet.text)
+            i += 1
 
 # st.subheader("traderstewie")
 # st.image(user.profile_image_url)
