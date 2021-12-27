@@ -12,15 +12,11 @@ import tweepy
 import config
 
 
-auth = tweepy.OAuthHandler(config.TWITTER_CONSUMER_KEY, config.TWITTER_CONSUMER_SECRET)
-# auth.set_access_token(config.TWITTER_ACCESS_TOKEN, config.TWITTER_ACCESS_TOKEN_SECRET)
-api = tweepy.API(auth)
-
 ticker = m.get_ticker()
 
 st.title("Security Analysis")
 
-option = st.sidebar.selectbox("Which Dashboard?", ("twitter", "chart"))
+option = st.sidebar.selectbox("Which Dashboard?", ("chart", "twitter"))
 ticker = st.sidebar.selectbox(label="Stock", options=ticker)
 
 
@@ -29,9 +25,16 @@ st.header(option)
 
 # user = api.get_user(username="traderstewie")
 # tweets = api.search_tweets(q=ticker)
-tweets = tweepy.Cursor(api.search_tweets, q=ticker)
 
 if option == "twitter":
+    auth = tweepy.OAuthHandler(
+        config.TWITTER_CONSUMER_KEY, config.TWITTER_CONSUMER_SECRET
+    )
+    # auth.set_access_token(config.TWITTER_ACCESS_TOKEN, config.TWITTER_ACCESS_TOKEN_SECRET)
+    api = tweepy.API(auth, wait_on_rate_limit=True)
+
+    tweets = tweepy.Cursor(api.search_tweets, q=ticker)
+
     i = 1
     for tweet in tweets.items():
         if i <= 30:
@@ -88,9 +91,9 @@ if option == "chart":
     window = 30
 
     num_samples = len(df) - window
-    indices = np.arange(num_samples).astype(np.int)[:, None] + np.arange(
+    indices = np.arange(num_samples).astype(int)[:, None] + np.arange(
         window + 1
-    ).astype(np.int)
+    ).astype(int)
     data = df["Adj Close"].values[indices]
     X = data[:, :-1]
     y = data[:, -1]
