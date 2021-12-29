@@ -19,12 +19,8 @@ st.title("Security Analysis")
 option = st.sidebar.selectbox("Which Dashboard?", ("chart", "twitter"))
 ticker = st.sidebar.selectbox(label="Stock", options=ticker)
 
-
-st.header(option)
-
-
-# user = api.get_user(username="traderstewie")
-# tweets = api.search_tweets(q=ticker)
+st.title(option)
+st.head(ticker)
 
 if option == "twitter":
     auth = tweepy.OAuthHandler(
