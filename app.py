@@ -20,13 +20,12 @@ option = st.sidebar.selectbox("Which Dashboard?", ("chart", "twitter"))
 ticker = st.sidebar.selectbox(label="Stock", options=ticker)
 
 st.title(option)
-st.head(ticker)
+st.subheader(ticker)
 
 if option == "twitter":
     auth = tweepy.OAuthHandler(
         config.TWITTER_CONSUMER_KEY, config.TWITTER_CONSUMER_SECRET
     )
-    # auth.set_access_token(config.TWITTER_ACCESS_TOKEN, config.TWITTER_ACCESS_TOKEN_SECRET)
     api = tweepy.API(auth, wait_on_rate_limit=True)
 
     tweets = tweepy.Cursor(api.search_tweets, q=ticker)
@@ -37,32 +36,14 @@ if option == "twitter":
             st.write(str(i) + " -> " + tweet.text)
             i += 1
 
-# st.subheader("traderstewie")
-# st.image(user.profile_image_url)
-
-
-# for tweet in tweets:
-#     if "$" in tweet.text:
-#         words = tweet.text.split(" ")
-#         for word in words:
-#             if word.startswith("$") and word[1:].isalpha():
-#                 symbol = word[1:]
-#                 st.write(symbol)
-#                 st.write(tweet.text)
 
 ticker_yahoo = ticker + ".NS"
 
 start = dt.datetime(2010, 1, 1)
 end = dt.datetime.now()
 
-# Stock_name = st.text_input("Ticker", "AAPL")
-
 df = web.DataReader(ticker_yahoo, "yahoo", start, end)
 df.reset_index(inplace=True)
-
-# fig = make_subplots(rows=2, cols=1, shared_xaxes=True)
-# fig.add_trace(go.Scatter(x=df.Date, y=df["Adj Close"], mode="lines"), row=1, col=1)
-# fig.add_trace(go.Bar(x=df.Date, y=df["Volume"]), row=2, col=1)
 
 if option == "chart":
     fig = go.Figure(
@@ -78,12 +59,6 @@ if option == "chart":
     )
     st.plotly_chart(fig)
 
-    url = "https://yhoo.it/33MKS3H"
-    st.write(url)
-    # fig.show()
-
-    # Prediction
-    # Train the model on the last 29 days and predict the label for the 30th day
     window = 30
 
     num_samples = len(df) - window
@@ -111,11 +86,3 @@ if option == "chart":
     y_pred_linear_reg = linear_reg_model.predict(X_test)
 
     st.write(y_pred_linear_reg)
-    # Plot the graph for it has trained on the training data
-    # df_linear = df.copy()
-    # df_linear.drop(["Open", "High", "Low", "Close", "Volume"], axis=1, inplace=True)
-    # df_linear = df_linear.iloc[window:split_indices]
-    # df_linear["Adj Close Train"] = y_pred_train_linear_reg[:-window]
-    # df_linear.plot(
-    #     label="AAPL", figsize=(16, 8), title="Adjusted Closing Price", grid=True
-    # )
