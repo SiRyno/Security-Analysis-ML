@@ -1,6 +1,6 @@
 # Security Analysis App using Strealit
 
-An WebApp designed to analyse the securities of the National Stock Exchange India (NSE).
+A WebApp designed to analyse the securities of the National Stock Exchange India (NSE).
 
 ## Features
 - [x] Chart of the data along with the rediction of the next day using different Machine Learning Techniques.
