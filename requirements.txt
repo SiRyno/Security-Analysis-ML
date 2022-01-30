@@ -1,6 +1,6 @@
 numpy
 pandas
-plotly
+plotly==5.4.0
 matplotlib
 pandas-datareader
 streamlit
