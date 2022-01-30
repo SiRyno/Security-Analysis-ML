@@ -23,7 +23,8 @@ st.subheader(ticker)
 
 if option == "twitter":
     auth = tweepy.OAuthHandler(
-        config.TWITTER_CONSUMER_KEY, config.TWITTER_CONSUMER_SECRET
+        # config.TWITTER_CONSUMER_KEY, config.TWITTER_CONSUMER_SECRET
+        st.secrets.TWITTER_CONSUMER_KEY, st.secrets.TWITTER_CONSUMER_SECRET
     )
     api = tweepy.API(auth, wait_on_rate_limit=True)
 
