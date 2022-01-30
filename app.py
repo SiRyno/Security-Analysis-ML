@@ -6,7 +6,6 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import pandas_datareader.data as web
 import streamlit as st
-from streamlit_echarts import st_echarts
 import model as m
 import tweepy
 import config
