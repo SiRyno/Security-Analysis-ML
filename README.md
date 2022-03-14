@@ -3,7 +3,7 @@
 A WebApp designed to analyse the securities of the National Stock Exchange India (NSE).
 
 ## Features
-- [x] Chart of the data along with the rediction of the next day using different Machine Learning Techniques.
+- [x] Chart of the data along with the prediction of the next day using different Machine Learning Techniques.
 - [x] Tweets related to security using the Twitter API.
 
 ## To-Do
